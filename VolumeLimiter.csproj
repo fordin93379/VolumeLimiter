@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net7.0-windows</TargetFramework>
+        <Nullable>enable</Nullable>
+        <UseWPF>true</UseWPF>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="NAudio" Version="2.2.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="bin\Debug\net7.0-windows\icon.ico" />
+      <Resource Include="icon.ico">
+        <DependentUpon>MainWindow.xaml</DependentUpon>
+      </Resource>
+      <None Remove="bin\Debug\net7.0-windows\**" />
+      <None Remove="bin\Debug\**" />
+      <None Remove="bin\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="bin\Debug\net7.0-windows\**" />
+      <Compile Remove="bin\Debug\**" />
+      <Compile Remove="bin\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="bin\Debug\net7.0-windows\**" />
+      <EmbeddedResource Remove="bin\Debug\**" />
+      <EmbeddedResource Remove="bin\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Page Remove="bin\Debug\net7.0-windows\**" />
+      <Page Remove="bin\Debug\**" />
+      <Page Remove="bin\**" />
+    </ItemGroup>
+
+</Project>
