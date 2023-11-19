@@ -2,12 +2,11 @@
 using System.Threading;
 using System.Windows;
 using NAudio.CoreAudioApi;
-using System.Configuration;
 using System.Drawing;
 using System.IO;
-using System.Text;
 using System.Windows.Forms;
-
+using Microsoft.Win32;
+using System.Diagnostics;
 
 namespace VolumeLimiter
 {
@@ -45,21 +44,27 @@ namespace VolumeLimiter
             window.Left = SystemParameters.PrimaryScreenWidth - window.Width;
             window.Top = SystemParameters.PrimaryScreenHeight - window.Height - (SystemParameters.PrimaryScreenHeight - SystemParameters.WorkArea.Height);
 
-            //Я знаю, что это страшный костыль, но у меня нет других идей, как сжать это в один файл)
-            if (!File.Exists("/VolumeLimiter.dll.config"))
-                using (FileStream file = new FileStream("/VolumeLimiter.dll.config", FileMode.OpenOrCreate))
-                {
-                    byte[] buffer = Encoding.Default.GetBytes("<configuration>\n    <appSettings>\n        <add key=\"VolumeLimit\" value=\"50\" />\n    </appSettings>\n</configuration>");
-                    file.Write(buffer, 0, buffer.Length);
-                }
-            
+            //saving params
+            if (File.Exists("volumeLimiter.config"))
+            {
+                volumeLevel = float.Parse(File.ReadAllText("volumeLimiter.config"));
+            }
+            else
+            {
+                volumeLevel = 1f;
+                RegistryKey registryKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+                registryKey.SetValue("VolumeLimiter", Process.GetCurrentProcess().MainModule.FileName);
+                registryKey.Close();
+            }
+            Slider.Value = (double)volumeLevel * 10d;
+
 
             //loading volume limit, and if it exists set slider pos
-            string? parameterValue = ConfigurationManager.AppSettings["VolumeLimit"];
-            if(parameterValue is string)
-            {
-                Slider.Value = double.Parse(parameterValue) * 10d; 
-            }
+            // string? parameterValue = ConfigurationManager.AppSettings["VolumeLimit"];
+            // if(parameterValue is string)
+            // {
+            //     Slider.Value = double.Parse(parameterValue) * 10d; 
+            // }
             
             //starting thread with volume level checker
             new Thread(() =>
@@ -140,10 +145,7 @@ namespace VolumeLimiter
         //On slider release, saving state
         private void slider_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
         {
-            Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            config.AppSettings.Settings["VolumeLimit"].Value = volumeLevel.ToString();
-            config.Save();
-            ConfigurationManager.RefreshSection("appSettings");
+            File.WriteAllText("volumeLimiter.config", volumeLevel.ToString());
         }
 
         
