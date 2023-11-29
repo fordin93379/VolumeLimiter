@@ -75,7 +75,7 @@ namespace VolumeLimiter
                     {
                         SetMasterVolume(volumeLevel);
                     }
-                    Thread.Sleep(2);
+                    Thread.Sleep(4000);
                 }
             }).Start();
         }
@@ -113,23 +113,33 @@ namespace VolumeLimiter
         //Getting volume level form api
         public float GetMasterVolume()
         {
-            // Create an instance of the MMDeviceEnumerator
-            MMDeviceEnumerator enumerator = new MMDeviceEnumerator();
+            try
+            {
+                // Create an instance of the MMDeviceEnumerator
+                MMDeviceEnumerator enumerator = new MMDeviceEnumerator();
 
-            // Get the default audio endpoint device (which represents the speakers)
-            MMDevice speakers = enumerator.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
+                // Get the default audio endpoint device (which represents the speakers)
+                MMDevice speakers = enumerator.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
 
-            // Get the audio endpoint volume control
-            AudioEndpointVolume volumeControl = speakers.AudioEndpointVolume;
+                // Get the audio endpoint volume control
+                AudioEndpointVolume volumeControl = speakers.AudioEndpointVolume;
 
-            // Get the current volume level (0.0 to 1.0)
-            return volumeControl.MasterVolumeLevelScalar;
+                // Get the current volume level (0.0 to 1.0)
+                return volumeControl.MasterVolumeLevelScalar;
+            }
+            catch (Exception e)
+            {
+                return 0f;
+            }
+            
             
         }
         
         //Setting system volume
         public void SetMasterVolume(float volume)
         {
+            try
+            {
             // Create an instance of the MMDeviceEnumerator
             MMDeviceEnumerator enumerator = new MMDeviceEnumerator();
 
@@ -140,7 +150,11 @@ namespace VolumeLimiter
             AudioEndpointVolume volumeControl = speakers.AudioEndpointVolume;
 
             // Set the volume level (0.0 to 1.0)
-            volumeControl.MasterVolumeLevelScalar = volume; 
+            volumeControl.MasterVolumeLevelScalar = volume;
+            }
+            catch (Exception e)
+            {
+            }
         }
         //On slider release, saving state
         private void slider_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
