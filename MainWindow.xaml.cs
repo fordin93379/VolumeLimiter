@@ -113,6 +113,7 @@ namespace VolumeLimiter
         //Getting volume level form api
         public float GetMasterVolume()
         {
+            //try is for case when there is no audio devices
             try
             {
                 // Create an instance of the MMDeviceEnumerator
@@ -137,7 +138,8 @@ namespace VolumeLimiter
         
         //Setting system volume
         public void SetMasterVolume(float volume)
-        {
+        {   
+            //try is for case when there is no audio devices
             try
             {
             // Create an instance of the MMDeviceEnumerator
