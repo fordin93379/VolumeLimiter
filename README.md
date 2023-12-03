@@ -1,0 +1,2 @@
+# VolumeLimiter
+VolumeLimiter is a simple app designed to control the volume level, as loud sounds can damage your hearing. To close the app, simply locate it in the task manager and terminate the process. Upon startup, it automatically adds itself to the autorun. If someone were to use it, I would improve the app and add some features. Initially, it was created for personal use, but I have now decided to publish it. The current state of the project is satisfactory for my needs.
