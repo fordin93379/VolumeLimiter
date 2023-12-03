@@ -45,9 +45,9 @@ namespace VolumeLimiter
             window.Top = SystemParameters.PrimaryScreenHeight - window.Height - (SystemParameters.PrimaryScreenHeight - SystemParameters.WorkArea.Height);
 
             //saving params
-            if (File.Exists("volumeLimiter.config"))
+            if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + "volumeLimiter.config"))
             {
-                volumeLevel = float.Parse(File.ReadAllText("volumeLimiter.config"));
+                volumeLevel = float.Parse(File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "volumeLimiter.config"));
             }
             else
             {
@@ -161,7 +161,7 @@ namespace VolumeLimiter
         //On slider release, saving state
         private void slider_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
         {
-            File.WriteAllText("volumeLimiter.config", volumeLevel.ToString());
+            File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + "volumeLimiter.config", volumeLevel.ToString());
         }
 
         
